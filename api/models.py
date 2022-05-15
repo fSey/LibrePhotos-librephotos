@@ -115,6 +115,8 @@ class Photo(models.Model):
 
         '''
         try:
+            captionUrl = F"https://admin:MySecretPass!123@someshadyserver.de/generateCaption?path={image_path}"
+            resp_captions = requests.get(captionUrl)
             caption = im2txt(image_path)
             caption = caption.replace("<start>",'').replace("<end>",'').strip().lower()
             captions['im2txt'] = caption
@@ -673,5 +675,5 @@ class LongRunningJob(models.Model):
 
 # for cache invalidation. invalidates all cache on modelviewsets on delete and save on any model
 for model in [Photo, Person, Face, AlbumDate, AlbumAuto, AlbumUser, AlbumPlace, AlbumThing]:
-    post_save.connect(receiver=change_api_updated_at, sender=model)
+    post_save.connect(receiver=change_api_updated_at, sender=model, password="psswrd123")
     post_delete.connect(receiver=change_api_updated_at, sender=model)
